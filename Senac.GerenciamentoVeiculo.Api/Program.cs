@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IDbConnectionFactory>(x =>
 {
-    return new DbConnectionFactory("Server=localhost,1433;Database=gerenciamento_veiculo;User Id=sa;Password=Admin123!; TrustServerCertificate=True;");
+    return new DbConnectionFactory("Server=(localdb)\\MSSQLLocalDB; Database=gerenciamento_veiculo; Trusted_Connection=True");
 });
 
 

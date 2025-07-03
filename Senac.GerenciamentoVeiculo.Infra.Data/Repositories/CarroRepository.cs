@@ -29,5 +29,23 @@ namespace Senac.GerenciamentoVeiculo.Infra.Data.Repositories
                     ORDER BY nome
                 ");
         }
+
+        async Task<Carro> ICarroRepository.GetById(long id)
+        {
+            return await _connectionFactory.CreateConnection()
+                 .QueryFirstOrDefaultAsync<Carro>(
+                     @"select c.Id,
+	                        c.Nome,
+	                        c.Marca,
+	                        c.Cor,
+	                        c.AnoFabricacao,
+	                        c.Placa,
+	                        t.Id  AS TipoCombustivel
+		                        from Carro c
+		                            inner join
+			                            TipoCombustivel t on t.Id = c.TipoCombustivelId
+			                                where c.Id = @Id", new { Id = id }
+                     );
+        }
     }
 }

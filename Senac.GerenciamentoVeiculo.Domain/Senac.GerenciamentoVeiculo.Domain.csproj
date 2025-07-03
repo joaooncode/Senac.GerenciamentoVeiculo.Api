@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO%27s\Requests\" />
+    <Compile Remove="DTO%27s\Requests\NovaPasta1\**" />
+    <Compile Remove="DTO%27s\Requests\NovaPasta\**" />
+    <EmbeddedResource Remove="DTO%27s\Requests\NovaPasta1\**" />
+    <EmbeddedResource Remove="DTO%27s\Requests\NovaPasta\**" />
+    <None Remove="DTO%27s\Requests\NovaPasta1\**" />
+    <None Remove="DTO%27s\Requests\NovaPasta\**" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@
 
         public string Marca { get; set; }
 
-        public int Ano { get; set; }
+        public int AnoFabricacao { get; set; }
 
         public string Placa { get; set; }
 
@@ -16,6 +16,5 @@
 
         public TipoCombustivel TipoCombustivel { get; set; }
 
-        public bool IsEletrico {  get; set; }
     }
 }
