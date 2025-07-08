@@ -1,6 +1,4 @@
-﻿using Senac.GerenciamentoVeiculo.Domain.Models;
-
-namespace Senac.GerenciamentoVeiculo.Domain.DTO_s.Responses.Carro
+﻿namespace Senac.GerenciamentoVeiculo.Domain.DTO_s.Responses.Carro
 {
     public class GetAllResponses
     {

@@ -24,7 +24,7 @@ namespace Senac.GerenciamentoVeiculo.Api.Controllers
         }
 
         [HttpGet]
-        public async Task <IActionResult> GetAll()
+        public async Task<IActionResult> GetAll()
         {
 
             var carrosResponse = await _carroService.GetAll();
@@ -56,16 +56,78 @@ namespace Senac.GerenciamentoVeiculo.Api.Controllers
                 return NotFound(response);
             }
 
-       
+
         }
 
         [HttpPost]
 
         public async Task<IActionResult> Insert([FromBody] InsertRequest insertRequest)
         {
-            var insertResponse = await _carroService.Insert(insertRequest);
 
-            return Ok(insertResponse);
+            try
+            {
+                var insertResponse = await _carroService.Insert(insertRequest);
+
+                return Ok(insertResponse);
+            }
+            catch (Exception ex)
+            {
+
+                var errorResponse = new ErroResponse
+                {
+                    Mensagem = ex.Message,
+                    StatusCode = "400"
+                };
+
+                return BadRequest(errorResponse);
+            }
+
+
+        }
+
+
+        [HttpDelete("{id}")]
+
+        public async Task<IActionResult> DeleteById([FromRoute] long id)
+        {
+            try
+            {
+                await _carroService.DeleteById(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                var errorResponse = new ErroResponse
+                {
+                    Mensagem = ex.Message,
+                    StatusCode = "404"
+                };
+                return BadRequest(errorResponse);
+            }
+        }
+
+        [HttpPut("{id}")]
+
+        public async Task<IActionResult> UpdateById([FromRoute] long id, [FromBody] UpdateRequest updateRequest )
+        {
+            try
+            {
+                await _carroService.UpdateById(id, updateRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                var errorResponse = new ErroResponse
+                {
+                    Mensagem = ex.Message,
+                    StatusCode = "500"
+                };
+
+                return BadRequest(errorResponse);
+            }
         }
 
     }

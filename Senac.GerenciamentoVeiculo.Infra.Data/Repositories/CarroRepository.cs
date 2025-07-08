@@ -19,6 +19,21 @@ namespace Senac.GerenciamentoVeiculo.Infra.Data.Repositories
             _connectionFactory = connectionFactory;
         }
 
+        public async Task DeleteById(long id)
+        {
+            await _connectionFactory.CreateConnection()
+                .QueryFirstOrDefaultAsync(
+                    @"
+                     DELETE FROM Carro WHERE id = @Id
+                    "
+                , new { Id = id });
+        }
+
+        public Task UpdateById(Carro carro)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Carro>> GetAll()
         {
             return await _connectionFactory.CreateConnection()
@@ -30,7 +45,35 @@ namespace Senac.GerenciamentoVeiculo.Infra.Data.Repositories
                 ");
         }
 
-        async Task<Carro> ICarroRepository.GetById(long id)
+        public async Task<long> Insert(Carro carro)
+        {
+            return await _connectionFactory.CreateConnection()
+                .QueryFirstOrDefaultAsync<long>(
+
+                    @"
+                        INSERT INTO carro
+                        (
+                            nome, 
+                            marca, 
+                            placa, 
+                            cor,    
+                            anoFabricacao, 
+                            tipoCombustivelId
+                        )
+                        OUTPUT INSERTED.Id
+                        VALUES
+                        (
+                            @Nome, 
+                            @Marca, 
+                            @Placa, 
+                            @Cor, 
+                            @AnoFabricacao, 
+                            @TipoCombustivel
+                        )"
+                , carro);
+        }
+
+       async Task<Carro> ICarroRepository.GetById(long id)
         {
             return await _connectionFactory.CreateConnection()
                  .QueryFirstOrDefaultAsync<Carro>(
@@ -46,6 +89,26 @@ namespace Senac.GerenciamentoVeiculo.Infra.Data.Repositories
 			                            TipoCombustivel t on t.Id = c.TipoCombustivelId
 			                                where c.Id = @Id", new { Id = id }
                      );
+        }
+
+
+       async Task ICarroRepository.UpdateById(Carro carro)
+        {
+             await _connectionFactory.CreateConnection()
+                .QueryFirstOrDefaultAsync<Carro>(
+                 @"
+                    UPDATE Carro SET
+                                    Placa = @Placa, 
+                                    Cor = @Cor,
+                                    TipoCombustivelId = @TipoCombustivel 
+                                        WHERE Id = @Id
+                    ", new
+                 {
+                     Placa = carro.Placa,
+                     Cor = carro.Cor,
+                     TipoCombustivel = (int)carro.TipoCombustivel,
+                     Id = carro.Id
+                 });
         }
     }
 }

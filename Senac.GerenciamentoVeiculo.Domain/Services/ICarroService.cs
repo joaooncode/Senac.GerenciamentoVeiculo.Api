@@ -6,11 +6,13 @@ namespace Senac.GerenciamentoVeiculo.Domain.Services
 {
     public interface ICarroService
     {
+        Task DeleteById(long id);
+        
         Task<IEnumerable<GetAllResponses>> GetAll();
+        
         Task<GetByIdResponses?> GetById(long id);
 
         Task<InsertResponse> Insert(InsertRequest insertRequest);
-
-
+        Task UpdateById(long id, UpdateRequest updateRequest);
     }
 }
