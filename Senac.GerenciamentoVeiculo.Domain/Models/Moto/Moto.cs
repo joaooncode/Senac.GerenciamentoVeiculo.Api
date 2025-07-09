@@ -15,6 +15,6 @@
         public string Cor {  get; set; }
 
 
-        public TipoCombustivel TipoCombustivel { get; set; }
+        public TipoCombustivelMoto TipoCombustivel { get; set; }
     }
 }

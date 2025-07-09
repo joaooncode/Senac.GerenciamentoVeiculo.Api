@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Senac.GerenciamentoVeiculo.Domain.Services.Moto;
+using Senac.GerenciamentoVeiculo.Domain.DTO_s.Requests.Moto;
+using Senac.GerenciamentoVeiculo.Domain.Services.Motos;
 
 namespace Senac.GerenciamentoVeiculo.Api.Controllers
 {
@@ -22,6 +23,13 @@ namespace Senac.GerenciamentoVeiculo.Api.Controllers
             var motos = await _motoService.GetAll();
 
             return Ok(motos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertMoto([FromBody] InsertMotoRequest insertMotoRequest)
+        {
+            var moto = await _motoService.InsertMoto(insertMotoRequest);
+            return Ok(moto);
         }
     }
 }

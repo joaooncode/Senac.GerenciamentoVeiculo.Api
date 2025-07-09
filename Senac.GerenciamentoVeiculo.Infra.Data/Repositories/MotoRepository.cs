@@ -21,5 +21,11 @@ namespace Senac.GerenciamentoVeiculo.Infra.Data.Repositories
             return await _connectionFactory.CreateConnection()
                 .QueryAsync<Moto>(@"SELECT nome FROM moto ORDER BY nome");
         }
+
+        public async Task<long> InsertMoto(Moto moto)
+        {
+            return await _connectionFactory.CreateConnection()
+                .QueryFirstOrDefaultAsync<long>(@"INSERT INTO moto (nome, marca, placa, cor, anoFabricacao, tipoCombustivelId) OUTPUT INSERTED.Id VALUES (@Nome, @Marca, @Placa, @Cor, @AnoFabricacao, @TipoCombustivel)", moto);
+        }
     }
 }
