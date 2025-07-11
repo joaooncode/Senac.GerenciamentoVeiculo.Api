@@ -15,6 +15,18 @@ namespace Senac.GerenciamentoVeiculo.Domain.Services.Motos
             _motoRepository = motoRepository;
         }
 
+        public async Task DeleteByIdMoto(long id)
+        {
+            var moto = await _motoRepository.GetByIdMoto(id);
+
+            if (moto == null)
+            {
+                throw new Exception($"Nenhuma moto encontrada com id: {id}");
+            }
+
+            await _motoRepository.DeleteByIdMoto(id);
+        }
+
         public async Task<IEnumerable<GetAllResponse>> GetAll()
         {
             var motos = await _motoRepository.GetAll();
@@ -22,6 +34,27 @@ namespace Senac.GerenciamentoVeiculo.Domain.Services.Motos
             var motosResponses = motos.Select(m => new GetAllResponse { Nome = m.Nome });
 
             return motosResponses;
+        }
+
+        public async Task<GetByIdMoto> GetMotoById(long id)
+        {
+            var moto = await _motoRepository.GetByIdMoto(id);
+
+            if (moto == null)
+            {
+                throw new Exception($"Nenhuma moto encontrada com o id: {id}");
+            }
+
+            return new GetByIdMoto
+            { 
+                Id = moto.Id,
+                Nome = moto.Nome,
+                AnoFabricacao = moto.AnoFabricacao,
+                Cor = moto.Cor,
+                Placa = moto.Placa,
+                Marca = moto.Marca,
+                TipoCombustivel = moto.TipoCombustivel.ToString() 
+            };
         }
 
         public async Task<InsertMotoResponse> InsertMoto(InsertMotoRequest insertMotoRequest)
@@ -60,6 +93,42 @@ namespace Senac.GerenciamentoVeiculo.Domain.Services.Motos
 
                 throw new Exception($"Falha ao criar moto: {ex}");
             }
+        }
+
+
+        public async Task UpdateByIdMoto(long id, UpdateMotoRequest updateMotoRequest)
+        {
+            bool isTipoCombustivelValido = Enum.TryParse(updateMotoRequest.TipoCombustivel, ignoreCase: true, out TipoCombustivelMoto tipoCombustivel);
+
+
+            if (!isTipoCombustivelValido)
+            {
+                throw new Exception($"Tipo combustível inválido: {updateMotoRequest.TipoCombustivel}");
+            }
+
+            try
+            {
+                var moto = await _motoRepository.GetByIdMoto(id);
+
+                if (moto == null)
+                {
+                    throw new Exception($"Nenhuma moto encontrada com o id: {id}");
+                }
+
+                moto.Placa = updateMotoRequest.Placa;
+                moto.Cor = updateMotoRequest.Cor;
+                moto.TipoCombustivel = tipoCombustivel;
+
+
+                await _motoRepository.UpdateByIdMoto(moto);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"Erro ao atualizar moto: {ex}");
+            }
+
         }
     }
 }

@@ -124,10 +124,10 @@ namespace Senac.GerenciamentoVeiculo.Domain.Services
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw new Exception($"Erro ao atualizar carro: {ex}");
             }
         }
     }
